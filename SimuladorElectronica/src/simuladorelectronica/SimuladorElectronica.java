@@ -59,7 +59,7 @@ public class SimuladorElectronica {
         c.removeListener(evt);
     }
     
-    
+    //jdsjdsadkasdja
     public class Eventos extends Listener{
 
          int lastPositionX = 0;
