@@ -6,7 +6,9 @@
 package simuladorelectronica;
 
 import com.leapmotion.leap.*;
+import java.awt.Graphics;
 import java.awt.AWTException;
+import java.awt.Canvas;
 import java.awt.Robot;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -30,6 +32,11 @@ public class SimuladorElectronica {
     public static void main(String[] args) {
         new SimuladorElectronica().main();
     }
+    
+    public void paint(Graphics g) {
+        
+    }
+    
     public void main(){
         Eventos evt=new Eventos();
         c=new Controller(evt);
@@ -55,15 +62,17 @@ public class SimuladorElectronica {
     
     public class Eventos extends Listener{
 
+         int lastPositionX = 0;
+         int lastPositionY = 0;
+         Frame frame;
         @Override
         public void onFrame(Controller cntrlr) {
             cntrlr.enableGesture(Gesture.Type.TYPE_CIRCLE);
             cntrlr.enableGesture(Gesture.Type.TYPE_SWIPE);
              Iterator<Finger> a ;
              Iterator<Gesture> b ;
-            Frame frame = cntrlr.frame();
-            int lastPositionX = 0;
-            int lastPositionY = 0;
+            frame = cntrlr.frame();
+           
             if (frame.hands().count()>0) {
                 
                 System.out.println("X:" + frame.hands().get(0).palmPosition().getX());
@@ -71,19 +80,19 @@ public class SimuladorElectronica {
                 //mover(frame.fingers().get(0).tipPosition().getX(), frame.fingers().get(0).tipPosition().getY());
                // mover(frame.fingers().get(0).tipVelocity().getX(), frame.fingers().get(0).tipVelocity().getZ());
                 GestureList gestureList = frame.gestures();
+                
                 b = gestureList.iterator();
-                if(frame.fingers().get(0).tipPosition().getX()==0.0) {
-                    lienzo.setPos(lastPositionX + (int)frame.hands().get(0).palmPosition().getX(),lastPositionY + (int)frame.hands().get(0).palmPosition().getY());
-                    lastPositionX = (int)frame.hands().get(0).palmPosition().getX();
-                    lastPositionY =(int)frame.hands().get(0).palmPosition().getY();
-                }
+                swipePositionMove(frame.fingers().get(0).tipPosition().getX());
                 while(b.hasNext()) {
                     System.err.println(b.next().type());
-                    if(b.next().type() == Gesture.Type.TYPE_CIRCLE) {
-                        lienzo.getGraphics().fillOval(posx, posy, 10, 10);
+                    if(b.next().type() == Gesture.Type.TYPE_CIRCLE){
+                        Graphics g = lienzo.getGraphics();
+                        g.fillOval(10, 10, 30, 50);
                         lienzo.repaint();
-                        System.out.println("Circulo");
-                        lienzo.setPos((int)frame.hands().get(0).palmVelocity().getX()*-1,(int)frame.hands().get(0).palmVelocity().getY());
+                        
+                                
+                        
+                        
                     }
                 }
                 
@@ -127,6 +136,14 @@ public class SimuladorElectronica {
                 rb.mouseMove(posx, posy);
             } catch (AWTException ex) {
                 Logger.getLogger(SimuladorElectronica.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        public void swipePositionMove(double validNumber) {
+            if(validNumber==0.0) {
+            lienzo.setPos(lastPositionX + (int)frame.hands().get(0).palmPosition().getX(),lastPositionY + (int)frame.hands().get(0).palmPosition().getY());
+                lastPositionX = (int)frame.hands().get(0).palmPosition().getX();
+                lastPositionY =(int)frame.hands().get(0).palmPosition().getY();
             }
         }
         

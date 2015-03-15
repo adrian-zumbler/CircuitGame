@@ -11,6 +11,7 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import simuladorelectronica.Piezas.Circle;
+import simuladorelectronica.Piezas.Cable;
 
 /**
  *
@@ -21,8 +22,8 @@ public class Lienzo extends Canvas implements KeyListener{
     private int width;
     private int x = 10;
     private int y = 10;
-    Graphics cuadro;
-    Graphics cuadro2;
+    Circle circle = new Circle(10, 10,10, 10);
+    Cable cable = new Cable();
     
     
     public Lienzo(int height, int width) {
@@ -33,22 +34,23 @@ public class Lienzo extends Canvas implements KeyListener{
     
     
     public void paint(Graphics g) {
-        cuadro = g;
-        cuadro2 = g; 
-        cuadro.setColor(Color.red);
-        cuadro.fillRect(x, y, 10, 10);
-        cuadro2.fillRect(x, y, 30, 30);
-        Circle circle = new Circle(x, y, height, width);
-        circle.fillOval(x, y, width, height);
+       
+        g.fillRect(x, y, 30, 30);
+        g.fillOval(circle.getX(), circle.getY(), 30, 30);
+        g.drawLine(10, 10, 40, 60);
+        
         
     }
+    
+    
     
     public void moveCuadro() {
          
     }
     public void setPos(int x, int y){
-        this.x=x;
-        this.y=y;
+        
+        circle.setX(x);
+        circle.setY(y);
         repaint();
     }
     
@@ -63,11 +65,11 @@ public class Lienzo extends Canvas implements KeyListener{
     @Override
     public void keyPressed(KeyEvent e) {
         x++;
-        repaint();
+        //repaint();
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {
+    public void keyReleased(KeyEvent e) {   
         
     }
 
